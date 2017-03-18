@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { WeatherPage } from '../pages/weather/weather';
 import { LocationsPage } from '../pages/locations/locations';
+import {WeatherService} from "../providers/weather-service";
 
 
 @Component({
@@ -16,7 +17,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any, icon: string}>;
 
-  constructor(public platform: Platform) {
+  constructor(public platform: Platform, public weatherService: WeatherService) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -34,6 +35,8 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+
+    this.weatherService.load();
   }
 
   openPage(page) {
