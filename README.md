@@ -18,3 +18,13 @@ $ ionic start myApp
 ```
 
 More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/docs/v2/getting-started/) page.
+
+## add two pages and two providers
+```bash
+➜ ionic g page weather
+➜ ionic g page locations
+➜ ionic g provider WeatherService
+➜ ionic g provider GeocodeService
+
+
+```
