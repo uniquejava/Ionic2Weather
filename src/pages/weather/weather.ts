@@ -21,6 +21,7 @@ export class WeatherPage {
   loader: LoadingController; // not needed at all
   refresher: Refresher; // not needed at all
   currentLoc: CurrentLoc = {lat: 0, lon: 0};
+  pageTitle: string = 'Current Location';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public weatherService: WeatherService, public loadingCtrl: LoadingController) {
     let loader = this.loadingCtrl.create({
@@ -28,26 +29,48 @@ export class WeatherPage {
     });
     loader.present();
 
-    Geolocation.getCurrentPosition().then(pos => {
-      console.log('lat: ', pos.coords.latitude, ', lon: ', pos.coords.longitude);
-      this.currentLoc.lat = pos.coords.latitude;
-      this.currentLoc.lon = pos.coords.longitude;
-      this.currentLoc.timestamp = pos.timestamp;
-      return this.currentLoc;
-    }).then(currentLoc => {
-      weatherService.getWeather(currentLoc).then(theResult => {
+    let loc = navParams.get('geoloc') || {lat: 49.2827, lon: -123.1207}; // Geolocation hardly can work
+    if (loc !== undefined) {
+      this.currentLoc = loc;
+      this.pageTitle = navParams.get('title');
+      weatherService.getWeather(this.currentLoc).then(theResult => {
         this.theWeather = theResult;
         this.currentData = this.theWeather.currently;
         this.daily = this.theWeather.daily;
         loader.dismiss();
       });
-    });
+    } else {
+      Geolocation.getCurrentPosition().then(pos => {
+        console.log('lat: ', pos.coords.latitude, ', lon: ', pos.coords.longitude);
+        this.currentLoc.lat = pos.coords.latitude;
+        this.currentLoc.lon = pos.coords.longitude;
+        this.currentLoc.timestamp = pos.timestamp;
+        return this.currentLoc;
+      }).then(currentLoc => {
+        weatherService.getWeather(currentLoc).then(theResult => {
+          this.theWeather = theResult;
+          this.currentData = this.theWeather.currently;
+          this.daily = this.theWeather.daily;
+          loader.dismiss();
+        });
+      });
+    }
   }
 
   doRefresh(refresher) {
-    setTimeout(() => {
+    var interval = Date.now() - this.currentLoc.timestamp;
+    console.log("ellipse time: ", interval/1000 , 's');
+    if(interval > 10000) {
+      this.weatherService.getWeather(this.currentLoc).then(theResult => {
+        this.theWeather = theResult;
+        this.currentData = this.theWeather.currently;
+        this.daily = this.theWeather.daily;
+        refresher.complete();
+      });
+    } else {
+      console.log('no refresh');
       refresher.complete();
-    }, 2000);
+    }
   }
 
   ionViewDidLoad() {
