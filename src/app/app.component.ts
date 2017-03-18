@@ -5,7 +5,7 @@ import {StatusBar, Splashscreen} from 'ionic-native';
 import {WeatherPage} from '../pages/weather/weather';
 import {LocationsPage} from '../pages/locations/locations';
 import {WeatherService} from "../providers/weather-service";
-import {CurrentLoc} from "../interfaces/current-loc";
+import {WeatherLocation} from "../interfaces/weather-location";
 
 
 @Component({
@@ -16,7 +16,7 @@ export class MyApp {
 
   rootPage: any = WeatherPage;
 
-  pages: Array<{title: string, component: any, icon: string, loc?: CurrentLoc}>;
+  pages: Array<WeatherLocation>;
 
   constructor(public platform: Platform, public weatherService: WeatherService) {
     this.initializeApp();

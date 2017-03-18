@@ -10,7 +10,6 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class GeocodeService {
-
   constructor(public http: Http) {
     console.log('Hello GeocodeService Provider');
   }

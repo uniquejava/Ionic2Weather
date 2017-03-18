@@ -6,6 +6,7 @@ import { LocationsPage } from '../pages/locations/locations';
 
 import {WeatherService} from '../providers/weather-service';
 import {GeocodeService} from '../providers/geocode-service';
+import {LocationsService} from "../providers/locations-service";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,6 @@ import {GeocodeService} from '../providers/geocode-service';
     WeatherPage,
     LocationsPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, WeatherService, GeocodeService]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, WeatherService, GeocodeService, LocationsService]
 })
 export class AppModule {}
