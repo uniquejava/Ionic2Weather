@@ -35,8 +35,6 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
-
-    this.weatherService.load();
   }
 
   openPage(page) {
