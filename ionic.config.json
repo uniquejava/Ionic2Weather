@@ -2,5 +2,11 @@
   "name": "ionic2-app-base",
   "app_id": "",
   "typescript": true,
-  "v2": true
+  "v2": true,
+  "proxies": [
+    {
+      "path": "/api/forecast",
+      "proxyUrl": "https://api.darksky.net/forecast/fb33c18b70e6cebe9fcb08d6c52758fe"
+    }
+  ]
 }
