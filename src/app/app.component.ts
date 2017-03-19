@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Nav, Platform} from 'ionic-angular';
+import {Nav, Platform, Events} from 'ionic-angular';
 import {StatusBar, Splashscreen} from 'ionic-native';
 
 import {WeatherPage} from '../pages/weather/weather';
@@ -18,11 +18,14 @@ export class MyApp {
 
   pages: Array<WeatherLocation>;
 
-  constructor(public platform: Platform, public weatherService: WeatherService, public locationsService: LocationsService) {
+  constructor(public platform: Platform, public weatherService: WeatherService, public locationsService: LocationsService, public events: Events) {
     this.initializeApp();
 
     this.getMyLocations();
 
+    events.subscribe('locations:updated', data => {
+      this.getMyLocations();
+    })
   }
 
   initializeApp() {
@@ -52,7 +55,7 @@ export class MyApp {
         {title: 'Edit Locations', component: LocationsPage, icon: 'create'},
         {title: 'Current Location', component: WeatherPage, icon: 'pin'}
       ];
-      
+
       for (let newLoc of res) {
         this.pages.push(newLoc);
       }
