@@ -14,7 +14,7 @@
   <ion-grid *ngIf="daily.data !== undefined">
     <ion-row>
       <ion-col width-100>
-        <h1>{{ currentData.temperature | number: '.0-0' }}&deg;</h1>
+        <h1>{{ currentData.temperature | celsius | number: '.0-0' }}&deg;</h1>
         <p><ion-icon name="{{ currentData.icon | weathericon }}"></ion-icon>
           {{ currentData.summary }}</p>
       </ion-col>

@@ -8,13 +8,15 @@ import {WeatherService} from '../providers/weather-service';
 import {GeocodeService} from '../providers/geocode-service';
 import {LocationsService} from "../providers/locations-service";
 import {Weathericon} from '../pipes/weathericon';
+import {Celsius} from '../pipes/celsius';
 
 @NgModule({
   declarations: [
     MyApp,
     WeatherPage,
     LocationsPage,
-    Weathericon
+    Weathericon,
+    Celsius
   ],
   imports: [
     IonicModule.forRoot(MyApp)
