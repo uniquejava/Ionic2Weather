@@ -23,9 +23,6 @@ export class MyApp {
 
     this.getMyLocations();
 
-    events.subscribe('locations:updated', data => {
-      this.getMyLocations();
-    })
   }
 
   initializeApp() {
@@ -49,16 +46,15 @@ export class MyApp {
   }
 
   private getMyLocations() {
-    this.locationsService.getLocations().then(res => {
-      // used for an example of ngFor and navigation
+    this.locationsService.locations$.subscribe((locs: Array<WeatherLocation>) => {
       this.pages = [
         {title: 'Edit Locations', component: LocationsPage, icon: 'create'},
         {title: 'Current Location', component: WeatherPage, icon: 'pin'}
       ];
-
-      for (let newLoc of res) {
+      for (let newLoc of locs) {
         this.pages.push(newLoc);
       }
-    })
+    });
   }
+
 }

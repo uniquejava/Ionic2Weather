@@ -21,8 +21,8 @@ export class LocationsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public locationsService: LocationsService,
               public geocodeService: GeocodeService, public alertCtrl: AlertController, public events: Events) {
 
-    locationsService.getLocations().then(theResult => {
-      this.locs = theResult;
+    locationsService.locations$.subscribe((locs: Array<WeatherLocation>) => {
+      this.locs = locs;
     });
 
 
@@ -34,7 +34,6 @@ export class LocationsPage {
 
   deleteLocation(loc) {
     this.locationsService.removeLocation(loc);
-    this.events.publish('locations:updated', {});
   }
 
   addLocation() {
@@ -65,7 +64,6 @@ export class LocationsPage {
                 newLoc.loc.lon = res.location.longitude;
 
                 this.locationsService.addLocation(newLoc);
-                this.events.publish('locations:updated', {});
               })
             }
           }
