@@ -33,12 +33,21 @@ export class WeatherPage {
     if (loc !== undefined) {
       this.currentLoc = loc;
       this.pageTitle = navParams.get('title');
-      weatherService.getWeather(this.currentLoc).then(theResult => {
-        this.theWeather = theResult;
-        this.currentData = this.theWeather.currently;
-        this.daily = this.theWeather.daily;
-        loader.dismiss();
-      });
+      weatherService.getWeather(this.currentLoc).then(
+        theResult => {
+          this.theWeather = theResult;
+          this.currentData = this.theWeather.currently;
+          this.daily = this.theWeather.daily;
+          loader.dismiss();
+        }
+      ).catch(
+        error => {
+          console.log("catch some error in promise of WeatherPage", error);
+          this.pageTitle = error.message;
+          loader.dismiss();
+        }
+      )
+
     } else {
       Geolocation.getCurrentPosition().then(pos => {
         console.log('lat: ', pos.coords.latitude, ', lon: ', pos.coords.longitude);
@@ -52,15 +61,21 @@ export class WeatherPage {
           this.currentData = this.theWeather.currently;
           this.daily = this.theWeather.daily;
           loader.dismiss();
-        });
+        }).catch(
+          error => {
+            console.log("catch some error in promise of WeatherPage", error);
+            this.pageTitle = error.message;
+            loader.dismiss();
+          }
+        );
       });
     }
   }
 
   doRefresh(refresher) {
     var interval = Date.now() - (this.currentLoc.timestamp || 0);
-    console.log("ellipse time: ", interval/1000 , 's');
-    if(interval > 10000) {
+    console.log("ellipse time: ", interval / 1000, 's');
+    if (interval > 10000) {
       this.weatherService.getWeather(this.currentLoc).then(theResult => {
         this.theWeather = theResult;
         this.currentData = this.theWeather.currently;

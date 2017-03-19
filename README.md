@@ -1,34 +1,66 @@
-Ionic 2 App Base
+Ionic 2 Weather App
 =====================
 
-This is the base template for Ionic 2 starter apps.
+## Run
 
-## Using this project
-
-You'll need the Ionic CLI with support for v2 apps:
-
+List available ios targets: 
 ```bash
-$ npm install -g ionic
+ios-sim showdevicetypes
 ```
 
-Then run:
-
+Emulate: 
 ```bash
-$ ionic start myApp
+ionic emulate ios --target="iPhone-7, 10.2"
+ionic emulate ios --target="iPhone-7-Plus, 10.2"
 ```
 
-More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/docs/v2/getting-started/) page.
+## Observable to promise 
+see weather-service.ts
+```ts
+load(currentLoc: CurrentLoc) {
+  if (this.data) {
+    return Promise.resolve(this.data);
+  }
+  let requestUrl = '/api/forecast/' + currentLoc.lat + ',' + currentLoc.lon;
+  return new Promise((resolve, reject) => {
+    this.http.get(requestUrl)
+      .timeout(5000)
+      // .catch(e => {
+      //   if (e.name === "TimeoutError") Observable.throw("Timeout has occurred");
+      //   return Observable.throw(e);
+      // })
+      .map(res => res.json())
+      .subscribe(
+        data => {
+          this.data = data;
+          resolve(this.data);
+        },
+        error => {
+          console.log("catch some error in observable.", error); // error
+          reject(error);
+        },
+        () => console.log('yay') // success
+      );
+  })
+}
 
-## add two pages and two providers
+```
+see [How to catch exception correctly from http.request()?][1]
+and [Angular 2 Http timeout][2]
+
+## Pages and Providers and Pipeline
 ```bash
 ➜ ionic g page weather
 ➜ ionic g page locations
 ➜ ionic g provider WeatherService
 ➜ ionic g provider GeocodeService
+➜ ionic g pipeline celsius
 
 
 ```
-### strange error
+### Elvis operator (a?.b)
+angular2不支持optional数组, 仅支持最基本的比如`a.b?.c`,不支持`a.b?[0].c`
+
 Code
 ```html
 <ion-col width-33>
@@ -55,14 +87,38 @@ Solution:
 或者加上 `<ion-grid *ngIf="daily.data != undefined">`
 
 
-see [here in stackoverflow][1]
+see [here in stackoverflow][3]
 
-## Google Geocode service
+##  3rd Party Services
+
+#### 1. Darksky service
+
+Register: https://darksky.net/dev/register
+
+Usage: https://api.darksky.net/forecast/APIKEY/LATITUDE,LONGITUDE
+
+Fix CORS issue in ionic2:
+```json
+{
+  "name": "ionic2-app-base",
+  "app_id": "",
+  "typescript": true,
+  "v2": true,
+  "proxies": [
+    {
+      "path": "/api/forecast",
+      "proxyUrl": "https://api.darksky.net/forecast/YOUR_API_KEY"
+    }
+  ]
+}
+
+```
+
+#### 2. Google Geocode service 
 Request APIKEY:
 https://developers.google.com/maps/documentation/geocoding/get-api-key
 
-## TODO
-加个CelsiusPipe
 
-
-[1]:http://stackoverflow.com/questions/35768768/angular2-using-elvis-operator-on-object-key-with-forward-slash?rq=1
+[1]:http://stackoverflow.com/questions/35326689/how-to-catch-exception-correctly-from-http-request
+[2]:http://stackoverflow.com/questions/41465687/angular-2-http-timeout
+[3]:http://stackoverflow.com/questions/35768768/angular2-using-elvis-operator-on-object-key-with-forward-slash?rq=1

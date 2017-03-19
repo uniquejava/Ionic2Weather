@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/timeout'
+import 'rxjs/add/operator/catch'
 import {CurrentLoc} from "../interfaces/current-loc";
+// import {Observable} from "rxjs";
 
 /*
  Generated class for the WeatherService provider.
@@ -21,13 +24,26 @@ export class WeatherService {
     if (this.data) {
       return Promise.resolve(this.data);
     }
-    return new Promise(resolve => {
-      this.http.get('/api/forecast/' + currentLoc.lat + ',' + currentLoc.lon)
+    let requestUrl = '/api/forecast/' + currentLoc.lat + ',' + currentLoc.lon;
+    return new Promise((resolve, reject) => {
+      this.http.get(requestUrl)
+        .timeout(5000)
+        // .catch(e => {
+        //   if (e.name === "TimeoutError") Observable.throw("Timeout has occurred");
+        //   return Observable.throw(e);
+        // })
         .map(res => res.json())
-        .subscribe(theResult => {
-          this.data = theResult;
-          resolve(this.data);
-        });
+        .subscribe(
+          data => {
+            this.data = data;
+            resolve(this.data);
+          },
+          error => {
+            console.log("catch some error in observable.", error); // error
+            reject(error);
+          },
+          () => console.log('yay') // success
+        );
     })
   }
 
