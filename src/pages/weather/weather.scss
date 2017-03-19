@@ -1,3 +1,28 @@
 page-weather {
+  ion-content {
+    background: url('../assets/imgs/bg.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+  }
+  ion-col, ion-col h1, ion-col p {
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+  }
 
+  h1 {
+    font-size: 72px;
+  }
+  p {
+    font-size: 36px;
+    margin-top: 0;
+  }
+
+  .opaque {
+    -webkit-backrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+  .opaque .toolbar-background {
+    background-color: rgba(#f8f8f8, 0.55);
+  }
 }

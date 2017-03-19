@@ -58,13 +58,14 @@ export class WeatherPage {
   }
 
   doRefresh(refresher) {
-    var interval = Date.now() - this.currentLoc.timestamp;
+    var interval = Date.now() - (this.currentLoc.timestamp || 0);
     console.log("ellipse time: ", interval/1000 , 's');
     if(interval > 10000) {
       this.weatherService.getWeather(this.currentLoc).then(theResult => {
         this.theWeather = theResult;
         this.currentData = this.theWeather.currently;
         this.daily = this.theWeather.daily;
+        this.currentLoc.timestamp = Date.now();
         refresher.complete();
       });
     } else {
