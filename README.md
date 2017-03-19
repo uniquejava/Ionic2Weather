@@ -1,6 +1,9 @@
 Ionic 2 Weather App
 =====================
 
+![screen1](screenshots/screen1.min.png)
+![screen2](screenshots/screen2.min.png)
+
 ## Run
 
 List available ios targets: 
@@ -10,9 +13,10 @@ ios-sim showdevicetypes
 
 Emulate: 
 ```bash
-ionic emulate ios --target="iPhone-7, 10.2"
-ionic emulate ios --target="iPhone-7-Plus, 10.2"
+ionic emulate ios -l -c --target="iPhone-7, 10.2"
+ionic emulate ios -l -c --target="iPhone-7-Plus, 10.2"
 ```
+其中-c(--consolelogs)将日志直接打印到terminal, -l(--livereload)支持保存刷新
 
 ## Observable to promise 
 see weather-service.ts
