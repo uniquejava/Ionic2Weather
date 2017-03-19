@@ -25,4 +25,19 @@ page-weather {
   .opaque .toolbar-background {
     background-color: rgba(#f8f8f8, 0.55);
   }
+
+  .refresher-pulling-text, .refresher-refreshing-text {
+    color: #ffffff;
+  }
+  .refresher-pulling-icon {
+    color: #ffffff;
+  }
+
+  .spinner-circles circle {
+    fill: #fff;
+  }
+
+  .has-refresher > .scroll-content {
+    border-top-width: 0;
+  }
 }
