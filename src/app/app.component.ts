@@ -6,7 +6,7 @@ import {WeatherPage} from '../pages/weather/weather';
 import {LocationsPage} from '../pages/locations/locations';
 import {WeatherService} from "../providers/weather-service";
 import {WeatherLocation} from "../interfaces/weather-location";
-
+import {LocationsService} from '../providers/locations-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -18,17 +18,10 @@ export class MyApp {
 
   pages: Array<WeatherLocation>;
 
-  constructor(public platform: Platform, public weatherService: WeatherService) {
+  constructor(public platform: Platform, public weatherService: WeatherService, public locationsService: LocationsService) {
     this.initializeApp();
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      {title: 'Edit Locations', component: LocationsPage, icon: 'create'},
-      {title: 'Current Location', component: WeatherPage, icon: 'pin'},
-      {title: 'Cape Canaveral, FL', component: WeatherPage, icon: 'pin', loc: {lat: 28.3922, lon: -80.6077}},
-      {title: 'San Francisco, CA', component: WeatherPage, icon: 'pin', loc: {lat: 37.7749, lon: -122.4194}},
-      {title: 'Vancouver, BC', component: WeatherPage, icon: 'pin', loc: {lat: 49.2827, lon: -123.1207}}
-    ];
+    this.getMyLocations();
 
   }
 
@@ -50,5 +43,19 @@ export class MyApp {
       this.nav.setRoot(page.component);
     }
 
+  }
+
+  private getMyLocations() {
+    this.locationsService.getLocations().then(res => {
+      // used for an example of ngFor and navigation
+      this.pages = [
+        {title: 'Edit Locations', component: LocationsPage, icon: 'create'},
+        {title: 'Current Location', component: WeatherPage, icon: 'pin'}
+      ];
+      
+      for (let newLoc of res) {
+        this.pages.push(newLoc);
+      }
+    })
   }
 }
